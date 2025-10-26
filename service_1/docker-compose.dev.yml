@@ -1,0 +1,28 @@
+version: "3"
+
+services:
+    api: &api
+        container_name: ecomet_service_1_api
+        build:
+            context: .
+            dockerfile: Dockerfile
+            args:
+                PROJECT_DIR: ${PROJECT_DIR}
+        env_file: .env
+        ports:
+            - "8000:8000"
+        volumes:
+            - ./src:${PROJECT_DIR}
+        depends_on:
+            - postgres
+
+    postgres: &pg
+        container_name: ecomet_service_1_pg
+        image: postgres:18.0-alpine
+        volumes:
+            - postgres_data:/var/lib/postgresql/data/
+        env_file:
+            - .env
+
+volumes:
+    postgres_data:
