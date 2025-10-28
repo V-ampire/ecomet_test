@@ -1,0 +1,29 @@
+version: "3"
+
+services:
+  app:
+    container_name: ecomet_service_1_app
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        PROJECT_DIR: ${PROJECT_DIR}
+    env_file: .env
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./src:${PROJECT_DIR}
+      - ./dlq:/var/lib/service_3/dlq
+    depends_on:
+      - clickhouse
+
+  clickhouse:
+    container_name: ecomet_service_3_clickhouse
+    image: clickhouse/clickhouse-server:25.7-alpine
+    env_file: .env
+    volumes:
+      - clickhouse_data:/var/lib/clickhouse
+      - ./clickhouse:/docker-entrypoint-initdb.d
+
+volumes:
+    clickhouse_data:

@@ -1,5 +1,4 @@
 import asyncio
-import logging
 
 from aiolimiter import AsyncLimiter
 
@@ -9,11 +8,13 @@ from config.settings import Settings
 from github.scrapper import GithubReposScrapper
 
 
+logger = get_logger(__name__)
+
+
 async def main():
     settings = Settings()
     semaphore = asyncio.Semaphore(settings.MCR_LIMIT)
     rate_limit = AsyncLimiter(*settings.RPC_LIMIT)
-    logger = get_logger('scrapper')
     async with http_session_factory() as http_session:
         try:
             scrapper = GithubReposScrapper(
@@ -21,7 +22,6 @@ async def main():
                 settings=settings,
                 semaphore=semaphore,
                 rate_limit=rate_limit,
-                logger=logger
             )
             repositories = await scrapper.get_repositories()
             # ToDo do smth with repos

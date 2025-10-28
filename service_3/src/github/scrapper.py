@@ -11,8 +11,7 @@ from config.http import retry_helper
 from config.logger import get_logger
 from config.settings import Settings
 from github.dto import Repository, RepositoryAuthorCommitsNum
-from github.dto import github_to_repository_dtos_mapper, MapperError
-from utils import str_exception
+from github.mappers import github_to_repository_dtos_mapper, MapperError
 
 
 logger = get_logger(__name__)
