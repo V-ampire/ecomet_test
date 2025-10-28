@@ -1,6 +1,6 @@
 select ps.phrase as phrase
   , 
-  arrayZip(groupArray(toInt32(ps.hour)), groupArray(toInt32(ps.hour_views))) as views_by_hour
+  arrayZip(groupArray(toInt32(ps.hour)), groupArray(ps.hour_views)) as views_by_hour
 from (
   select phrase
     , (dateName('hour', dt)) as hour
