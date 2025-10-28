@@ -17,7 +17,7 @@ def init_di_container() -> DIContainer:
     container = DIContainer()
 
     settings = Settings()
-    ch_session = http_session_factory(ClickhouseClientSession, **settings.http_connection_config)
+    ch_session = http_session_factory(ClickhouseClientSession, **settings.clickhouse_connection_config)
 
     # singletons
     container.register_instance(Settings, settings)
