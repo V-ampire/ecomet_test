@@ -18,7 +18,7 @@ POSTGRES_DATABASE=
 
 Использовал докер чтобы не разворачивать базу данных.
 
-Результат:
+### Результат:
 
 ![result.png](service_1/result.png)
 
@@ -56,7 +56,7 @@ MCR_LIMIT=5.
 - tenacity для ретраев
 - aiolimiter - для управления рейт-лимитами
 
-Результат:
+### Результат:
 
 ![result.png](service_2/result.png)
 
@@ -109,7 +109,7 @@ Fewer, larger inserts reduce the number of parts written, minimize merge load, a
 - [handybits](https://github.com/V-ampire/handybits) как отметил выше в основном для DI контейнера и нескольких утилит.
 
 
-Результат:
+### Результат:
 
 ![result_app.png](service_3/result_app.png)
 
@@ -121,3 +121,30 @@ Fewer, larger inserts reduce the number of parts written, minimize merge load, a
 
 
 ![result_pos.png](service_3/result_repos.png)
+
+
+### Примечание
+В прилагаемом sql файле устаревшая дата, т.к. по заданию предполагаются запросы за сегодня несколько обновил данные 
++ добавл другие фразы и айди компании.
+
+Запрос:
+```
+select ps.phrase as phrase
+  , 
+  arrayZip(groupArray(toInt32(ps.hour)), groupArray(ps.hour_views)) as views_by_hour
+from (
+  select phrase
+    , (dateName('hour', dt)) as hour
+    , sum(views) as hour_views
+  from test.phrases_views
+  where toDate(dt) = today()
+  and campaign_id =  3333333
+  group by phrase, dateName('hour', dt)
+) as ps
+group by ps.phrase
+;
+```
+
+### Результат:
+
+![result.png](service_4/result.png)
